@@ -5,139 +5,56 @@
 
   <meta charset="UTF-8">
   <title>center</title>
+
+  <link rel="stylesheet" href="ds.css" type="text/css">
   <script type="text/javascript" src="http://map.vworld.kr/js/vworldMapInit.js.do?apiKey=105D3824-2650-30B0-A7DB-31972B097098"></script>
+
+  <!-- <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script> -->
+
   <!-- <script type="text/javascript" src="http://map.vworld.kr/js/vworldMapInit.js.do?version=2.0&apiKey=105D3824-2650-30B0-A7DB-31972B097098"></script> -->
-  <!-- <SCRIPT language="JavaScript" type="text/javascript" src="http://map.vworld.kr/js/sopMapInit.js.do?apiKey=82DC0D15-1A5E-3BA2-B935-34C50833CCEC"> -->
-  </SCRIPT>
-  <script type="text/javascript">
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 
-
-  var SOPPlugin
-
-  var map = null;
-  vworld.showMode = false;
-  vworld.init(
-  "cont1"
-  , "map-first"
-  ,function() {
-  map = this.vmap;
-  map.setBaseLayer(map.vworldBaseMap);
-  map.setControlsType({"simpleMap":true});
-  map.setCenterAndZoom(14134975.826087, 4519054.8257785, 14);
-  }
-  ,function (obj){SOPPlugin = obj; }
-  ,function (msg){alert('oh my god');}
-  );
-  function setModeCallback(){
-  vworld.setModeCallback(modecallback);
-  }
-  function fnChangeHybridVisibility(){
- map.vworldHybrid.setVisibility(!map.vworldHybrid.getVisibility());
-}
-function addThemeLayer(title, layer){
-map.showThemeLayer(title, {layers:layer});
-}
-function addTileCache(){
-map.showTileCacheLayer('산사태위험지도', 'SANSATAI',{min:9,max:15});
-}
-function setTestProxy(){
- alert(OpenLayers.ProxyHost);
-}
-
-function jsSample1ex(name,visibility){
- if(SOPPlugin != null){
- var str="";
- var SOPLayerList = SOPPlugin.getLayerList();
- var vis = SOPLayerList.getVisible(name);
- if(visibility == true){
- vis = SOPPlugin.SOPVISIBLE_ON;
- }else{
- vis = SOPPlugin.SOPVISIBLE_OFF;
- }
- SOPLayerList.setVisible(name, vis);
- }
-}
-function jsSample4() {
-  if (SOPPlugin != null) {
-    var SOPCamera = SOPPlugin.getViewCamera();
-    SOPCamera.setDirect(-5);
-  }
-}
-
-function jsSample7() {
-
-  if (SOPPlugin != null) {
-    SOPPlugin.getViewCamera().moveLonLat(127.0405, 37.5016); //카메라가 이동할 경도와 위도
-    SOPPlugin.getViewCamera().setAltitude(500); //카메라가 이동할 고도
-    var vec3 = SOPPlugin.createVec3();
-    poi = SOPPlugin.createPoint('999');
-    vec3.Longitude = 127.0405; //심볼이 생설될 위치의 경도
-    vec3.Latitude = 37.5016; //심볼이 생성될 위치의 위도
-    vec3.Altitude = 0; //심볼이 생성될 위치의 고도
-    poi.Set(vec3);
-    var sym = poi.getSymbol();
-    var icon = sym.getIcon();
-    icon.setNormalIcon('http://www.vworld.kr/images/op02/map_point.png'); //심볼 아이콘 주소
-    sym.setIcon(icon);
-    poi.setName("테스트"); //심볼 아이콘 이름
-    poi.setSymbol(sym);
-    SOPPlugin.getView().addChild(poi, 8);
-  }
-}
-
-function createPlacemark() {
-  var va, vNum, pt;
-  vNum = SOPPlugin.getView().getInputPointCount();
-  if (vNum < 1) return;
-  va = SOPPlugin.getView().getInputPointList();
-  pt = va.get(0);
-  var poi, symbolizdPoi;
-  var objId = "1";
-  poi = SOPPlugin.createPoint(objId);
-  poi.Set(pt)
-  var sym = poi.getSymbol();
-  var icon = sym.getIcon();
-  icon.setNormalIcon("http://vworld.kr/images/op02/map_point.png"); //플레이스마크 아이콘 주소
-  sym.setIcon(icon);
-  poi.setSymbol(sym);
-  poi.setName("이름없는 Placemark"); //플레이스마크 아이콘 이름
-  SOPPlugin.getView().addChild(poi, 8);
-  SOPPlugin.getView().setWorkMode(sop.cons.mouseState.SOPMOUSE_MOVEGRAB)
-}
-
-function removeObj() {
-  alert("삭제할 객체를 선택하여 주십시오.");
-  window.sop.earth.addEventListener(SOPPlugin.getUserLayer(), "lmouseup", removeObjEvent);
-}
-
-function removeObjEvent(event) {
-  var type = "";
-  if (event.getTarget() != null) {
-    if (event.getTarget().getType() == "SOPPoint") {
-      removeObj = event.getTarget();
-      if (removeObj) {
-        SOPPlugin.getUserLayer().removeAtObject(removeObj);
-        SOPPlugin.getView().MapRender();
-      }
-    }
-  }
-}
-
-  </script>
 </head>
-
 
 
 <body>
 
-  <div id="cont1" style="width: auto;height: auto;"></div><br />
+  <div id="cont1" style="width: parent.width ;height: 800px;"></div><br />
 
-  <!-- <br><input type="button" value="위치이동" onclick="jsSample()" />
-  <input type="button" value="고도변경" onclick="jsSample2()" />
-  <input type="button" value="각도변경" onclick="jsSample3()" /> -->
+  <select id="markerGroup">
+        <option value="grp1">LoRa</option>
+        <option value="grp2">Wifi</option>
+        <option value="grp3">...뭐..</option>
+  </select>
+
+  <input type="text" value=1000 id="rad" maxlength="5" size="5">M
+  <button type="button" onclick="addMarkingEvent();">마커찍기</button>
+
+  <select id = "markerList">
+  </select>
+  <button type="button" onclick="mhide();">마커 숨기기</button>
+  <button type="button" onclick="mshow();">마커 나타내기</button>
+  <button type="button" onclick="mdelete();">마커 지우기</button>
+  <button type="button" onclick="resetAll();">초기화</button>
 
 
-    <!-- <script type="text/javascript" async="" src="3djs.js"></script> -->
+  <form id="searchForm" action="#" class="form_data" onsubmit="return false;search();">
+
+		<input type="hidden" name="apiKey" value="105D3824-2650-30B0-A7DB-31972B097098" />
+
+	<ul id="result_ajax">
+		<li></li>
+	</ul>
+	<p id="result_count"></p>
+	<p id="result_pos"></p>
+	<p id="loading"></p>
+
+	</form>
+
+
+
+  <script type="text/javascript" async="" src="mapControl.js"></script>
+  <!-- <script type="text/javascript" async="" src="testPoly.js"></script> -->
 </body>
 
 </html>
