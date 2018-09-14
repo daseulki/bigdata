@@ -10,6 +10,7 @@ var mControl; //마커이벤트변수
 var tempMarker = new Array(); //임시마커
 var tempScope = new Array();
 
+
 vworld.init(
   "cont1", "map-first",
   function() {
@@ -167,6 +168,9 @@ function createPolygon() {
 /**
  * 마커 찍기
  */
+
+
+
 function addMarkingEvent() {    
   var pointOptions = {
     persist: true
@@ -181,7 +185,6 @@ function addMarkingEvent() {    
     mControl.events.on({
       "measure": mClick
     }); //객체를 클릭이벤트 등록
-            
     map.addControl(mControl); //나의 map에 객체 추가
         
   }           
@@ -192,20 +195,20 @@ function addMarkingEvent() {    
 /**
  * 말풍선이벤트
  */
-var num = 1;
 
 function mClick(event) {
   map.init(); //나의 맵 초기화
   var temp = event.geometry; //마커 클릭이벤트시 나오는 좌표
   var pos = new OpenLayers.LonLat(temp.x, temp.y); //좌표값 셋팅
-  geocoder_reverse(pos.lon, pos.lat);
-  var msg = num + 1 + "번 마커 <br>" + add + "<br>x: " + temp.x + "<br>y: " + temp.y;
-  addMarker(pos.lon, pos.lat, msg, null); //말풍선
 
+  geocoder_reverse(pos.lon, pos.lat);
+  //말풍선
 }
 
-
 var myradius = 1000;
+var num = 0;
+var add = "";
+
 
 function setradius() {
   var rad = document.getElementById("rad").value;
@@ -215,7 +218,6 @@ function setradius() {
 /**
  * 말풍선결과
  */
-var num = 0;
 
 function colorChange(group) {
   var style_orange = {
@@ -266,20 +268,27 @@ function addMarker(lon, lat, message, imgurl) {
 
   // 마커의 z-Index 설정
   marker.setZindex(3);
-  marker.id = "marker" + num;
+  marker.id = num;
   // marker.setDragMode(true);
   map.addMarker(marker);
   tempMarker[num] = marker;
   tempScope[num] = scope;
 
-  // console.log(tempMarker); //OBJ반환
+  console.log(tempMarker[num]); //OBJ반환
+  addOption();
+
+}
+
+function addOption(){
   var markList = document.getElementById("markerList");
   var markOption = document.createElement("option");
   markOption.text = num + 1 + "번 마커";
-  markOption.value = num;
-  markList.options.add(markOption);
+  markOption.value = num; //checkedOption으로 접근
+  markList.add(markOption,markList[num]);
+  console.log(markList[num]);
   num += 1;
 }
+
 
 function mhide() {
   var checkedOption = document.getElementById("markerList").value;
@@ -294,10 +303,10 @@ function mshow() {
 }
 
 function mdelete() { ////////만들어야됨!!!!!!!!!!!!!!!!!
-  var checkedOption = document.getElementById("markerList");
+  var checkedOption = document.getElementById("markerList").value
   tempMarker[checkedOption].hide();
   tempScope[checkedOption].setRadius(0);
-  checkedOption.remove[checkedOption.selectedIndex];
+  markerList.remove(checkedOption);
 
 }
 
@@ -350,9 +359,10 @@ var geocoder_reverse = function(x, y) {
       for (i in data.response.result) {
         geoResult += data.response.result[i].text;
       }
-      $('#geoAddress').text(geoResult);
-      add = geoResult;
-      console.log("1 " + add);
+      $('#loading').text(geoResult);
+      var msg = num + 1 + "번 마커 <br>" + geoResult +"<br>x: " + x + "<br>y: " + y;
+      addMarker(x, y, msg, null);
+
     },
     beforeSend: function() {},
 

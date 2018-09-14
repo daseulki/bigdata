@@ -19,7 +19,7 @@
 
 <body>
 
-  <div id="cont1" style="width: parent.width ;height: 800px;"></div><br />
+  <div id="cont1" style="width: parent.width ;height: 850px;"></div><br />
 
   <select id="markerGroup">
         <option value="grp1">LoRa</option>
@@ -29,13 +29,14 @@
 
   <input type="text" value=1000 id="rad" maxlength="5" size="5">M
   <button type="button" onclick="addMarkingEvent();">마커찍기</button>
-
+  <button type="button" onclick="resetAll();">초기화</button>
+  <br />
   <select id = "markerList">
   </select>
   <button type="button" onclick="mhide();">마커 숨기기</button>
   <button type="button" onclick="mshow();">마커 나타내기</button>
   <button type="button" onclick="mdelete();">마커 지우기</button>
-  <button type="button" onclick="resetAll();">초기화</button>
+
 
 
   <form id="searchForm" action="#" class="form_data" onsubmit="return false;search();">
