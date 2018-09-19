@@ -1,19 +1,127 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 
-<HEAD>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<TITLE>test</TITLE>
-</HEAD>
+<head>
+
+  <meta charset="UTF-8">
+  <title>maptest</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="ds.css" type="text/css">
+  <style type="text/css">
+    html,
+    body {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+  </style>
+
+  <script type="text/javascript" src="http://map.vworld.kr/js/vworldMapInit.js.do?apiKey=105D3824-2650-30B0-A7DB-31972B097098"></script>
+  <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+  <!-- <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script> -->
+
+  <!-- <script type="text/javascript" src="http://map.vworld.kr/js/vworldMapInit.js.do?version=2.0&apiKey=105D3824-2650-30B0-A7DB-31972B097098"></script> -->
+
+</head>
 
 
- <frameset cols="10%,90%,0%" border="3">
- <frame src="left2D.html" name="left" scrolling="no"/>
- <frame src="center.html" name="center" scrolling="no" noresize/>
- <frame src="right3D.html" name="right" scrolling="no"/>
-</frameset>
+<body>
+  <div class="header">
+    <p>
+      브이월드 맵 테스트
+    </p>
+  </div>
+  <div id="cont1" class="map"></div><br />
+
+  <div id="mapCheckbox" class="left">
+    <p>
+      지도 종류
+    </p>
+    <div class="custom-control custom-radio">
+      <input type="radio" class="custom-control-input" id="mode0" name="groupOfDefaultRadios" onclick="vworld.setMode(0)" checked>
+      <label class="custom-control-label" for="mode0">배경지도</label>
+    </div>
+
+    <div class="custom-control custom-radio">
+      <input type="radio" class="custom-control-input" id="mode1" name="groupOfDefaultRadios" onclick="vworld.setMode(1)">
+      <label class="custom-control-label" for="mode1">항공지도</label>
+    </div>
+    <br />
+    <p>
+      행정 구역
+    </p>
+    <div class="custom-control custom-checkbox">
+      <!-- <input type="checkbox" id="hybrid" class="custom-control-input" onclick="fnChangeHybridVisibility();" />
+      <label class="custom-control-label" for="hybrid"> 교통,시설명칭</label><br /> -->
+      <input type="checkbox" id="do" class="custom-control-input" onclick="addThemeLayer('광역시도','LT_C_ADSIDO');" name="addcache" />
+      <label class="custom-control-label" for="do"> 광역시도</label><br />
+    </div>
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" id="si" class="custom-control-input" onclick=" addThemeLayer('시군구','LT_C_ADSIGG');" name="addcache" />
+      <label class="custom-control-label" for="si"> 시군구</label><br />
+    </div>
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" id="eub" class="custom-control-input" onclick=" addThemeLayer('읍면동','LT_C_ADEMD');" name="addcache" />
+      <label class="custom-control-label" for="eub"> 읍면동</label><br />
+    </div>
+    <div class="custom-control custom-checkbox">
+      <input type="checkbox" id="jijuk" class="custom-control-input" onclick=" addThemeLayer('지적도','LP_PA_CBND_BUBUN,LP_PA_CBND_BONBUN');" name="addcache" />
+      <label class="custom-control-label" for="jijuk"> 지적도</label><br />
+    </div>
+
+
+  </div>
+  <div id="markerMaker" class="footer">
+
+    <select id="markerGroup" class="custom-control custom-select">
+          <option value="grp1" selected>LoRa</option>
+          <option value="grp2">Wifi</option>
+          <option value="grp3">...뭐..</option>
+    </select>
+
+    <div class="md-form">
+    <input type="text" id="rad" class="form-control" value=1000>
+    <label for="rad">M</label>
+
+    <button type="button" class="btn" onclick="addMarkingEvent();">마커찍기</button>
+    <button type="button" class="btn" onclick="resetAll();">초기화</button>
+    <br />
+    <select id = "markerList" class="custom-select">
+    </select>
+    <button type="button" class="btn" onclick="mhide();">마커 숨기기</button>
+    <button type="button" class="btn" onclick="mshow();">마커 나타내기</button>
+    <button type="button" class="btn" onclick="mdelete();">마커 지우기</button>
+
+
+    </div>
+
+    <!-- <input type="text" class="custom-control " value=1000 id="rad" maxlength="5" size="5">M -->
 
 
 
+    <form id="searchForm" action="#" class="form_data" onsubmit="return false;search();">
+
+  		<input type="hidden" name="apiKey" value="105D3824-2650-30B0-A7DB-31972B097098" />
+
+  	<ul id="result_ajax">
+  		<li></li>
+  	</ul>
+  	<p id="result_count"></p>
+  	<p id="result_pos"></p>
+  	<p id="loading"></p>
+
+  	</form>
+  </div>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+  <script type="text/javascript" async="" src="mapControl.js"></script>
+  <!-- <script type="text/javascript" async="" src="testPoly.js"></script> -->
+</body>
 
 </html>

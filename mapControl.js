@@ -59,6 +59,7 @@ function addTileCache() {
 function setTestProxy() {
   alert(OpenLayers.ProxyHost);
 }
+
 //
 // function jsSample1ex(name, visibility) {
 //   if (SOPPlugin != null) {
@@ -223,26 +224,26 @@ function setradius() {
 
 function colorChange(group) {
   var style_orange = {
-    strokeColor: "#ff7300",
+    strokeColor: "#ff6300",
     strokeOpacity: 0.6,
     strokeWidth: 1,
-    fillColor: "#ff7300",
+    fillColor: "#ff6300",
     fillOpacity: 0.2
   };
 
   var style_blue = {
     strokeColor: "#0021ff",
-    strokeOpacity: 0.5,
+    strokeOpacity: 0.6,
     strokeWidth: 1,
     fillColor: "#0021ff",
-    fillOpacity: 0.1
+    fillOpacity: 0.2
   }
   var style_violet = {
     strokeColor: "#c400ff",
-    strokeOpacity: 0.5,
+    strokeOpacity: 0.6,
     strokeWidth: 1,
     fillColor: "#c400ff",
-    fillOpacity: 0.1
+    fillOpacity: 0.2
   }
 
   if (group == "grp1") {
@@ -264,7 +265,7 @@ function addMarker(lon, lat, message, imgurl) {
 
   var marker = new vworld.Marker(lon, lat, message, "");
   // 마커 아이콘 이미지 파일명 설정합니다.
-  marker += { radius = myradius; };
+
   if (typeof imgurl == 'string') {
     marker.setIconImage(imgurl);
   }
@@ -276,7 +277,6 @@ function addMarker(lon, lat, message, imgurl) {
   map.addMarker(marker);
   tempMarker[num] = marker;
   tempScope[num] = scope;
-
   console.log(tempMarker[num]); //OBJ반환
   addOption();
 
@@ -296,19 +296,22 @@ function addOption(){
 function mhide() {
   var checkedOption = document.getElementById("markerList").value;
   tempMarker[checkedOption].hide();
-  tempScope[checkedOption].setRadius(0);
+  tempScope[checkedOption].setFillOpacity(0);
+  tempScope[checkedOption].setOpacity(0);
 }
 
 function mshow() {
   var checkedOption = document.getElementById("markerList").value;
   tempMarker[checkedOption].show();
-  tempScope[checkedOption].setRadius(myradius);
+  tempScope[checkedOption].setFillOpacity(0.2);
+  tempScope[checkedOption].setOpacity(0.6);
 }
 
 function mdelete() { ////////만들어야됨!!!!!!!!!!!!!!!!!
   var checkedOption = document.getElementById("markerList").value
   tempMarker[checkedOption].hide();
-  tempScope[checkedOption].setRadius(0);
+  tempMarker.splice(checkedOption, 1);
+  map.vectorLayer.removeFeatures(tempScope[checkedOption]);
   markerList.remove(checkedOption);
 
 }
