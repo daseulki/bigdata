@@ -9,10 +9,21 @@ vworld.showMode = false;
 var mControl; //마커이벤트변수
 var tempMarker = new Array(); //임시마커
 var tempScope = new Array();
+var groupMarker;
+var groupName;
+
+
+window.onload = function() {
+
+  groupMarker = new vworld.GroupMarker('lora');
+  groupMarker = new vworld.GroupMarker('wifi');
+  groupMarker =  new vworld.GroupMarker('ble');
+
+}
 
 
 vworld.init(
-  "cont1", "map-first",
+  "mainMap", "map-first",
   function() {
     map = this.vmap;
     map.setBaseLayer(map.vworldBaseMap);
@@ -39,9 +50,9 @@ function setModeCallback() {
   vworld.setModeCallback(modecallback);
 }
 
-function fnChangeHybridVisibility() {
-  map.vworldHybrid.setVisibility(!map.vworldHybrid.getVisibility());
-}
+// function fnChangeHybridVisibility() {
+//   map.vworldHybrid.setVisibility(!map.vworldHybrid.getVisibility());
+// }
 
 function addThemeLayer(title, layer) {
   map.showThemeLayer(title, {
@@ -49,12 +60,12 @@ function addThemeLayer(title, layer) {
   });
 }
 
-function addTileCache() {
-  map.showTileCacheLayer('산사태위험지도', 'SANSATAI', {
-    min: 9,
-    max: 15
-  });
-}
+// function addTileCache() {
+//   map.showTileCacheLayer('산사태위험지도', 'SANSATAI', {
+//     min: 9,
+//     max: 15
+//   });
+// }
 
 function setTestProxy() {
   alert(OpenLayers.ProxyHost);
@@ -172,15 +183,28 @@ function setTestProxy() {
  * 마커 찍기
  */
 
-
+//
+// function mapLayeringEvent(){
+//   var mode0 = document.getElementById("mode0");
+//   mode0.addEventListener('click',vworld.setMode(0),false);
+//   var mode1= document.getElementById("mode1");
+//   mode1.addEventListener('click',vworld.setMode(1),false);
+//   var dosi =document.getElementById("do");
+//   dosi.addEventListener('click',addThemeLayer('광역시도','LT_C_ADSIDO'),false);
+//   var si = document.getElementById("si");
+//   si.addEventListener('click',addThemeLayer('시군구','LT_C_ADSIGG'),false);
+//   var eub = document.getElementById("eub");
+//   eub.addEventListener('click',addThemeLayer('읍면동','LT_C_ADEMD'),false);
+//   var jijuk = document.getElementById("jijuk");
+//   jijuk.addEventListener('click',addThemeLayer('지적도','LP_PA_CBND_BUBUN,LP_PA_CBND_BONBUN'),false);
+// };
 
 function addMarkingEvent() {    
   var pointOptions = {
     persist: true
   }; //포인트옵션
       
-  if (mControl == null) { //마커컨트롤이 정의 되어 있지 않으면
-            
+  if (mControl == null) { //마커컨트롤이 정의 되어 있지 않으면    
     mControl =             new OpenLayers.Control.Measure(OpenLayers.Handler.Point, {
       handlerOptions: pointOptions
     }); //포인트 객체 생성
@@ -192,7 +216,6 @@ function addMarkingEvent() {    
         
   }           
   map.init(); //나의 맵 초기화
-      
   mControl.activate(); //마커컨트롤 활성화
 }
 /**
@@ -213,14 +236,11 @@ var num = 0;
 var add = "";
 
 
-function setradius() {
+function setRadius() {
   var rad = document.getElementById("rad").value;
-  myradius = rad;
+  if (rad != "") myradius = rad;
   console.log("myradius is chaged to" + rad);
 }
-/**
- * 말풍선결과
- */
 
 function colorChange(group) {
   var style_orange = {
@@ -246,24 +266,28 @@ function colorChange(group) {
     fillOpacity: 0.2
   }
 
-  if (group == "grp1") {
+  if (group == "lora") {
     return style_orange;
-  } else if (group == "grp2") {
+  } else if (group == "wifi") {
     return style_blue;
   } else {
     return style_violet;
   }
 }
 
-function addMarker(lon, lat, message, imgurl) {
-  setradius();
-  var group = document.getElementById("markerGroup").value;
-  var scope = new vworld.Circle({
+function addMarker(group, lon, lat, message, imgurl) {
+  setRadius();
+  this.group = group;
+  var scope = {
+    circle: new vworld.Circle({
     x: lon,
     y: lat
-  }, myradius, colorChange(group));
+  }, myradius, colorChange(group)),
+  groupName: group
 
-  var marker = new vworld.Marker(lon, lat, message, "");
+};
+
+  var marker = groupMarker.addMarker(group, lon, lat, message, "");
   // 마커 아이콘 이미지 파일명 설정합니다.
 
   if (typeof imgurl == 'string') {
@@ -278,14 +302,14 @@ function addMarker(lon, lat, message, imgurl) {
   tempMarker[num] = marker;
   tempScope[num] = scope;
   console.log(tempMarker[num]); //OBJ반환
-  addOption();
+
 
 }
 
-function addOption(){
+function addOption(optionText){
   var markList = document.getElementById("markerList");
   var markOption = document.createElement("option");
-  markOption.text = num + 1 + "번 마커";
+  markOption.text = optionText;
   markOption.value = num; //checkedOption으로 접근
   markList.add(markOption,markList[num]);
   console.log(markList[num]);
@@ -293,25 +317,65 @@ function addOption(){
 }
 
 
+	function hideGroup() {
+    var groupName = document.getElementById('markerGroup').value;
+		groupMarker.hideGroup(groupName);
+    for(var i=0;i<tempScope.length;i++){
+      if(tempScope[i].groupName == groupName){
+        tempScope[i].circle.setFillOpacity(0);
+        tempScope[i].circle.setOpacity(0);
+
+      }else{
+        console.log(groupName +"없는뎅??" + i)
+      }
+    }
+	}
+
+	function showGroup() {
+    var groupName = document.getElementById('markerGroup').value;
+		groupMarker.showGroup(groupName);
+    for(var i=0;i<tempScope.length;i++){
+      if(tempScope[i].groupName == groupName){
+        tempScope[i].circle.setFillOpacity(0.2);
+        tempScope[i].circle.setOpacity(0.6);
+
+      }
+    }
+	}
+
+  function removeGroup() {
+    var groupName = document.getElementById('markerGroup').value;
+  	groupMarker.removeGroup(groupName);
+    for(var i=0;i<tempScope.length;i++){
+      if(tempScope[i].groupName == groupName){
+        map.vectorLayer.removeFeatures(tempScope[i].circle);
+        markerList.remove(i);
+      }
+    }
+    groupMarker = new vworld.GroupMarker(groupName);
+
+  }
+
+
 function mhide() {
   var checkedOption = document.getElementById("markerList").value;
   tempMarker[checkedOption].hide();
-  tempScope[checkedOption].setFillOpacity(0);
-  tempScope[checkedOption].setOpacity(0);
+  tempScope[checkedOption].circle.setFillOpacity(0);
+  tempScope[checkedOption].circle.setOpacity(0);
 }
 
 function mshow() {
   var checkedOption = document.getElementById("markerList").value;
   tempMarker[checkedOption].show();
-  tempScope[checkedOption].setFillOpacity(0.2);
-  tempScope[checkedOption].setOpacity(0.6);
+  tempScope[checkedOption].circle.setFillOpacity(0.2);
+  tempScope[checkedOption].circle.setOpacity(0.6);
 }
 
 function mdelete() { ////////만들어야됨!!!!!!!!!!!!!!!!!
   var checkedOption = document.getElementById("markerList").value
-  tempMarker[checkedOption].hide();
+  tempMarker[checkedOption].removeMarker();
   tempMarker.splice(checkedOption, 1);
-  map.vectorLayer.removeFeatures(tempScope[checkedOption]);
+  map.vectorLayer.removeFeatures(tempScope[checkedOption].circle);
   markerList.remove(checkedOption);
 
 }
@@ -321,6 +385,10 @@ function resetAll() {
   map.initAll();
   num = 0;
   markerList.options.length = 0;
+}
+
+function saveImg(){
+    map.getPrintMap();
 }
 
 ////////////////////////////////////////////////////////////
@@ -365,9 +433,12 @@ var geocoder_reverse = function(x, y) {
       for (i in data.response.result) {
         geoResult += data.response.result[i].text;
       }
-      $('#loading').text(geoResult);
+      // $('#loading').text(geoResult);
       var msg = num + 1 + "번 마커 <br>" + geoResult +"<br>x: " + x + "<br>y: " + y;
-      addMarker(x, y, msg, null);
+      var group = document.getElementById("markerGroup").value;
+      var optionText = num + 1 +"번 마커:[" + group + "] "+ geoResult;
+      addMarker(group, x, y, msg, null);
+      addOption(optionText);
 
     },
     beforeSend: function() {},

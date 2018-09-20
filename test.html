@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 
@@ -33,12 +34,12 @@
       지도 종류
     </p>
     <div class="custom-control custom-radio">
-      <input type="radio" class="custom-control-input" id="mode0" name="groupOfDefaultRadios" onclick="vworld.setMode(0)" checked>
+      <input type="radio" class="custom-control-input" id="mode0" name="groupOfDefaultRadios" checked>
       <label class="custom-control-label" for="mode0">배경지도</label>
     </div>
 
     <div class="custom-control custom-radio">
-      <input type="radio" class="custom-control-input" id="mode1" name="groupOfDefaultRadios" onclick="vworld.setMode(1)">
+      <input type="radio" class="custom-control-input" id="mode1" name="groupOfDefaultRadios">
       <label class="custom-control-label" for="mode1">항공지도</label>
     </div>
     <br />
@@ -49,14 +50,14 @@
       <!-- <input type="checkbox" id="hybrid" class="custom-control-input" onclick="fnChangeHybridVisibility();" />
       <label class="custom-control-label" for="hybrid"> 교통,시설명칭</label><br /> -->
       <input type="checkbox" id="do" class="custom-control-input" name="addcache" />
-      <label class="custom-control-label" for="do" onclick="addThemeLayer('광역시도','LT_C_ADSIDO')"> 광역시도</label><br />
+      <label class="custom-control-label" for="do"> 광역시도</label><br />
     </div>
     <div class="custom-control custom-checkbox">
-      <input type="checkbox" id="si" class="custom-control-input" name="addcache" onclick="addThemeLayer('시군구','LT_C_ADSIGG')"/>
+      <input type="checkbox" id="si" class="custom-control-input" name="addcache" />
       <label class="custom-control-label" for="si"> 시군구</label><br />
     </div>
     <div class="custom-control custom-checkbox">
-      <input type="checkbox" id="eub" class="custom-control-input" name="addcache" onclick="addThemeLayer('읍면동','LT_C_ADEMD')" />
+      <input type="checkbox" id="eub" class="custom-control-input" name="addcache" />
       <label class="custom-control-label" for="eub"> 읍면동</label><br />
     </div>
     <div class="custom-control custom-checkbox">
@@ -68,7 +69,7 @@
   </div>
   <div id="markerMaker" class="footer">
     <div class="addcontainer">
-
+    <div class = "row">
 
 
         <select id="markerGroup" class="custom-control custom-select group-select">
@@ -80,26 +81,24 @@
           <option value="grp1" selected>그룹1</option>
     </select>
         <input type="text" id="rad" class="form-control rad-input" placeholder="반지름을 입력하세요(M)">
-  <!-- 반지름 라디오버튼으로 만들기.. -->
 
 
-      <button class="btn" onclick="addMarkingEvent();">마커생성</button>
+
+      <button class="btn" onclick="addGroupMarker('lora','');">마커생성</button>
       <button class="btn">실행취소</button>
 
-
+    </div>
        <br />
-      <button class="btn" onclick="hideGroup()" >그룹숨기기</button>
-      <button class="btn" onclick="showGroup()">그룹나타내기</button>
-      <button class="btn" onclick="removeGroup()">그룹지우기</button>
-      <button class="btn" onclick = "map.getPrintMap();">저장하기</button>
+      <button class="btn">그룹 관리</button>
+      <button class="btn">저장하기</button>
       <button class="btn" onclick="resetAll();">초기화</button><br />
 
 
       <select id="markerList" class="custom-select">
       </select>
-      <button type="button" class="btn" onclick="mhide();">마커 숨기기</button>
+      <!-- <button type="button" class="btn" onclick="mhide();">마커 숨기기</button>
     <button type="button" class="btn" onclick="mshow();">마커 나타내기</button>
-    <button type="button" class="btn" onclick="mdelete();">마커 지우기</button>
+    <button type="button" class="btn" onclick="mdelete();">마커 지우기</button> -->
 
 
     </div>
@@ -125,7 +124,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
   <!-- <script type="text/javascript" async="" src="controller.js"></script> -->
-  <script type="text/javascript" async="" src="mapControl.js"></script>
+  <script type="text/javascript" async="" src="groupMarker.js"></script>
   <!-- <script type="text/javascript" async="" src="testPoly.js"></script> -->
 </body>
 
