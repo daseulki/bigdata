@@ -17,8 +17,8 @@ window.onload = function() {
 
   groupMarker = new vworld.GroupMarker('lora');
   groupMarker = new vworld.GroupMarker('wifi');
-  groupMarker =  new vworld.GroupMarker('ble');
-
+  groupMarker = new vworld.GroupMarker('ble');
+  console.log('added groupMarker');
 }
 
 
@@ -179,6 +179,21 @@ function setTestProxy() {
 //
 
 
+
+
+function slideLeft(){
+  var btn = document.getElementById('mapCheckbox');
+  btn.classList.toggle("slideleft");
+
+}
+function slideUp(){
+  var btn = document.getElementById('markerMaker');
+  btn.classList.toggle("slideup");
+  // console.log('upup')
+}
+
+
+
 /**
  * 마커 찍기
  */
@@ -231,7 +246,7 @@ function mClick(event) {
   //말풍선
 }
 
-var myradius = 1000;
+var myradius = 1000; //초기값
 var num = 0;
 var add = "";
 
@@ -239,7 +254,7 @@ var add = "";
 function setRadius() {
   var rad = document.getElementById("rad").value;
   if (rad != "") myradius = rad;
-  console.log("myradius is chaged to" + rad);
+  // console.log("myradius is chaged to" + rad);
 }
 
 function colorChange(group) {
@@ -309,6 +324,7 @@ function addMarker(group, lon, lat, message, imgurl) {
 function addOption(optionText){
   var markList = document.getElementById("markerList");
   var markOption = document.createElement("option");
+
   markOption.text = optionText;
   markOption.value = num; //checkedOption으로 접근
   markList.add(markOption,markList[num]);
@@ -338,7 +354,6 @@ function addOption(optionText){
       if(tempScope[i].groupName == groupName){
         tempScope[i].circle.setFillOpacity(0.2);
         tempScope[i].circle.setOpacity(0.6);
-
       }
     }
 	}
@@ -373,7 +388,7 @@ function mshow() {
 
 function mdelete() { ////////만들어야됨!!!!!!!!!!!!!!!!!
   var checkedOption = document.getElementById("markerList").value
-  tempMarker[checkedOption].removeMarker();
+  tempMarker[checkedOption].remove();
   tempMarker.splice(checkedOption, 1);
   map.vectorLayer.removeFeatures(tempScope[checkedOption].circle);
   markerList.remove(checkedOption);
@@ -381,7 +396,9 @@ function mdelete() { ////////만들어야됨!!!!!!!!!!!!!!!!!
 }
 
 function resetAll() {
-  var checkedOption = document.getElementById("markerList").value;
+  console.log(tempMarker);
+
+
   map.initAll();
   num = 0;
   markerList.options.length = 0;
@@ -410,9 +427,9 @@ var geocoder = function(name) {
       // var point = ol.proj.transform([ data.response.result.point.x*1, data.response.result.point.y*1],'EPSG:4326', "EPSG:900913");
       // dataAjax(point[0],point[1]);
     },
-    beforeSend: function() {
-      $('#loading').text("로딩중....");
-    },
+    // beforeSend: function() {
+    //   $('#loading').text("로딩중....");
+    // },
 
     error: function(xhr, stat, err) {}
   });
@@ -441,8 +458,7 @@ var geocoder_reverse = function(x, y) {
       addOption(optionText);
 
     },
-    beforeSend: function() {},
-
+    // beforeSend: function() {},
     error: function(xhr, stat, err) {}
 
   });
