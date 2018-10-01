@@ -20,7 +20,6 @@
 
 </head>
 
-
 <body>
   <div class="header">
     <p>
@@ -29,62 +28,55 @@
   </div>
   <div id="mainMap" class="map"></div><br />
 
-  <div>
-    <div id="mapCheckbox" class="left">
-      <div>
-        <button id="leftBtn" class="fas fa-layer-group btn btn-primary " onclick="slideLeft();"></button>
-      </div>
-      <div>
-        <p>
-          지도 종류
-        </p>
-        <div class="custom-control custom-radio">
-          <input type="radio" class="custom-control-input" id="mode0" name="groupOfDefaultRadios" onclick="vworld.setMode(0)" checked>
-          <label class="custom-control-label" for="mode0">배경지도</label>
-        </div>
 
-        <div class="custom-control custom-radio">
-          <input type="radio" class="custom-control-input" id="mode1" name="groupOfDefaultRadios" onclick="vworld.setMode(1)">
-          <label class="custom-control-label" for="mode1">항공지도</label>
-        </div>
-        <br />
-        <p>
-          행정 구역
-        </p>
-        <div>
-
-          <div class="custom-control custom-checkbox">
-            <!-- <input type="checkbox" id="hybrid" class="custom-control-input" onclick="fnChangeHybridVisibility();" />
-        <label class="custom-control-label" for="hybrid"> 교통,시설명칭</label><br /> -->
-            <input type="checkbox" id="do" class="custom-control-input" name="addcache" />
-            <label class="custom-control-label" for="do" onclick="addThemeLayer('광역시도','LT_C_ADSIDO')"> 광역시도</label><br />
-          </div>
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" id="si" class="custom-control-input" name="addcache" onclick="addThemeLayer('시군구','LT_C_ADSIGG')" />
-            <label class="custom-control-label" for="si"> 시군구</label><br />
-          </div>
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" id="eub" class="custom-control-input" name="addcache" onclick="addThemeLayer('읍면동','LT_C_ADEMD')" />
-            <label class="custom-control-label" for="eub"> 읍면동</label><br />
-          </div>
-          <div class="custom-control custom-checkbox">
-            <input type="checkbox" id="jijuk" class="custom-control-input" name="addcache" />
-            <label class="custom-control-label" for="jijuk"> 지적도</label><br />
-          </div>
-
-        </div>
-
-
-
-      </div>
-
+  <div id="mapCheckbox" class="left">
+    <div>
+      <button id="leftBtn" class="fas fa-layer-group btn btn-primary " onclick="slideLeft();"></button>
     </div>
-    <div id="markerMaker" class="footer">
-      <div>
-        <button id="upBtn" class=" fas fa-plus btn btn-primary" onclick="slideUp();"></button>
+    <div>
+      <p>
+        지도 종류
+      </p>
+      <div class="custom-control custom-radio">
+        <input type="radio" class="custom-control-input" id="mode0" name="groupOfDefaultRadios" onclick="vworld.setMode(0)" checked>
+        <label class="custom-control-label" for="mode0">배경지도</label>
       </div>
-      <div class="addcontainer">
-  <div class = "row">
+
+      <div class="custom-control custom-radio">
+        <input type="radio" class="custom-control-input" id="mode1" name="groupOfDefaultRadios" onclick="vworld.setMode(1)">
+        <label class="custom-control-label" for="mode1">항공지도</label>
+      </div>
+      <br />
+      <p>
+        행정 구역
+      </p>
+      <div>
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" id="do" class="custom-control-input" name="addcache" />
+          <label class="custom-control-label" for="do" onclick="addThemeLayer('광역시도','LT_C_ADSIDO')"> 광역시도</label><br />
+        </div>
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" id="si" class="custom-control-input" name="addcache" onclick="addThemeLayer('시군구','LT_C_ADSIGG')" />
+          <label class="custom-control-label" for="si"> 시군구</label><br />
+        </div>
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" id="eub" class="custom-control-input" name="addcache" onclick="addThemeLayer('읍면동','LT_C_ADEMD')" />
+          <label class="custom-control-label" for="eub"> 읍면동</label><br />
+        </div>
+        <div class="custom-control custom-checkbox">
+          <input type="checkbox" id="jijuk" class="custom-control-input" name="addcache" />
+          <label class="custom-control-label" for="jijuk"> 지적도</label><br />
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div id="markerMaker" class="footer">
+    <div>
+      <button id="upBtn" class=" fas fa-plus btn btn-primary" onclick="slideUp();"></button>
+    </div>
+    <div class="addcontainer">
+      <div class="row">
 
 
         <select id="markerGroup" class="custom-control custom-select group-select">
@@ -93,61 +85,80 @@
           <option value="ble">BLE</option>
         </select>
         <select id="mGroup" class="custom-control custom-select group-select">
-          <option value="grp1" selected>그룹1</option>
+
         </select>
+        <!-- <div class="custom-control custom-radio">
+            <input type="radio" class="custom-control-input" id="rad" name="groupOfDefaultRadios" value=500  checked>
+            <label class="custom-control-label" for="rad">500m</label>
+            <input type="radio" class="custom-control-input" id="rad" name="groupOfDefaultRadios" value=1000  checked>
+            <label class="custom-control-label" for="rad">1,000m</label>
+            <input type="radio" class="custom-control-input" id="rad" name="groupOfDefaultRadios" value=2500  checked>
+            <label class="custom-control-label" for="rad">2,500m</label>
+          </div> -->
+
         <input type="text" id="rad" class="form-control rad-input" placeholder="반지름을 입력하세요(M)">
         <!-- 반지름 라디오버튼으로 만들기.. -->
 
 
         <button class="btn btn-primary" onclick="addMarkingEvent();">마커생성</button>
         <button class="btn">실행취소</button>
-  </div>
-  <div class = "row">
-        <button class="btn" onclick="">그룹관리</button>
-        <div class = "groupManage">
-          <button class="btn" onclick="hideGroup()">그룹추가하기</button>
-          <button class="btn" onclick="hideGroup()">그룹숨기기</button>
-          <button class="btn" onclick="showGroup()">그룹나타내기</button>
-          <button class="btn" onclick="removeGroup()">그룹지우기</button>
+      </div>
+      <div class="row">
+        <button id="groupBtn" class="btn" onclick="openPopup()">그룹관리</button>
+
+        <div id="groupModal" class="groupManage">
+          <div class="modal-header">
+            <p>그룹 관리</p>
+            <span class="close" onclick="closePopup()">&times;</span>
+          </div>
+          <div class="modal-content">
+            <div class="row">
+              <select id="mMarkerGroup" class="custom-control custom-select group-select">
+                <option value="lora" selected>LoRa</option>
+                <option value="wifi">Wifi</option>
+                <option value="ble">BLE</option>
+              </select>
+              <select id="mMGroup" class="custom-control custom-select group-select">
+              </select>
+            </div>
+            <input type="text" id="makeGroupName" class="form-control" placeholder="생성할 그룹 이름">
+            <button class="btn" onclick="addGroup()">그룹 추가하기</button>
+            <button class="btn" onclick="hideGroup()">그룹 숨기기</button>
+            <button class="btn" onclick="showGroup()">그룹 나타내기</button>
+            <button class="btn" onclick="removeGroup()">그룹 지우기</button>
+          </div>
         </div>
         <button class="btn" onclick="map.getPrintMap();">저장하기</button>
         <button class="btn" onclick="resetAll();">초기화</button>
-</div>
-
-
-
-        <select id="markerList" class="custom-control custom-select group-select">
-      </select>
-        <button type="button" class="btn" onclick="mhide();">마커 숨기기</button>
-        <button type="button" class="btn" onclick="mshow();">마커 나타내기</button>
-        <button type="button" class="btn" onclick="mdelete();">마커 지우기</button>
-
-
       </div>
 
+      <select id="markerList" class="custom-control custom-select group-select">
+      </select>
+      <button type="button" class="btn" onclick="mhide();">마커 숨기기</button>
+      <button type="button" class="btn" onclick="mshow();">마커 나타내기</button>
+      <button type="button" class="btn" onclick="mdelete();">마커 지우기</button>
 
-      <!-- 주소 검색 form -->
 
-      <form id="searchForm" action="#" class="form_data" onsubmit="return false;search();">
-
-        <input type="hidden" name="apiKey" value="105D3824-2650-30B0-A7DB-31972B097098" />
-
-        <!-- <ul id="result_ajax">
-  		<li></li>
-  	</ul>
-  	<p id="result_count"></p>
-  	<p id="result_pos"></p>
-  	<p id="loading"></p> -->
-
-      </form>
     </div>
 
+    <!-- 주소 검색 form -->
+    <form id="searchForm" action="#" class="form_data" onsubmit="return false;search();">
+      <input type="hidden" name="apiKey" value="105D3824-2650-30B0-A7DB-31972B097098" />
+      <!-- <ul id="result_ajax">
+  		<li></li>
+    	</ul>
+      	<p id="result_count"></p>
+      	<p id="result_pos"></p>
+      	<p id="loading"></p> -->
+    </form>
+  </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    <!-- <script type="text/javascript" async="" src="controller.js"></script> -->
-    <script type="text/javascript" async="" src="mapControl.js"></script>
-    <!-- <script type="text/javascript" async="" src="testPoly.js"></script> -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  <!-- <script type="text/javascript" async="" src="controller.js"></script> -->
+  <script type="text/javascript" async="" src="mapControl.js"></script>
+  <!-- <script type="text/javascript" async="" src="testPoly.js"></script> -->
 </body>
 
 </html>
