@@ -162,7 +162,8 @@ let add = "";
 
 
 function setRadius() {
-  let rad = document.getElementById("rad").value;
+
+  let rad = document.querySelector('input[name="rad"]:checked').value;
   if (rad != "") myradius = rad;
   // console.log("myradius is chaged to" + rad);
 }
@@ -245,7 +246,7 @@ function addOption(optionText) {
 
 function addGroup(){
   let mGroup = document.getElementById("mGroup");
-  let mMGroup = document.getElementById("mMGroup")
+  let mMGroup = document.getElementById("mMGroup");
   let markOption = document.createElement("option");
   let groupName = document.getElementById("makeGroupName").value;
 
@@ -253,6 +254,7 @@ function addGroup(){
   markOption.value = groupNum;
   mGroup.add(markOption,mGroup[groupNum]);
   mMGroup.add(markOption,mMGroup[groupNum]);
+  groupNum += 1;
 }
 
 function hideGroup() {
@@ -311,10 +313,12 @@ function mshow() {
 
 function mdelete() { ////////만들어야됨!!!!!!!!!!!!!!!!!
   let checkedOption = document.getElementById("markerList").value
-  tempMarker[checkedOption].remove();
   tempMarker.splice(checkedOption, 1);
+  groupMarker.removeMarker(checkedOption); //이거 왜 안되는지 알 수가 없음
   map.vectorLayer.removeFeatures(tempScope[checkedOption].circle);
+  // markerList.option[checkedOption] = null;
   markerList.remove(checkedOption);
+
 }
 
 function resetAll() {

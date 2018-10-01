@@ -3,13 +3,15 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  font-size: 12px;
 }
 
 .header {
-  font-size: 16px;
+  font-size: 20px;
   padding: 3px;
   height: 4%;
   text-align: center;
+  font-weight: bold;
 }
 
 .map {
@@ -25,10 +27,10 @@ html, body {
 #upBtn, #leftBtn {
   position: absolute;
   border-radius: 50%;
-  height: 32px;
-  width: 32px;
+  height: 50px;
+  width: 50px;
   border: 0;
-  font-size: 16px;
+  font-size: 24px;
   text-align: center;
   opacity: 0.2;
 }
@@ -40,43 +42,65 @@ html, body {
 #upBtn {
   left: 50%;
   transform: translateX(-50%);
-  bottom: 205px;
+  bottom: 210px;
 }
 
 #leftBtn {
   top: 10%;
-  left: 105px;
+  left: 127px;
 }
 
 .left {
   position: absolute;
   padding: 10px;
-  width: 100px;
+  width: 120px;
   z-index: 5;
   background: white;
-  left: -100px;
-    border-radius: 10px;
+  left: -120px;
+  border-radius: 10px;
 }
 .row{
   margin:0;
+  padding: 3px;
 }
+.addcontainer .row *{
+  margin-right: 5px;
+}
+
+.addcontainer .row .groupManage *{
+  margin-right:  0;
+}
+
 .footer {
   position: absolute;
   width: 100%;
-  height: 200px;
+  height: 205px;
   /* bottom:0; */
-  bottom: -200px;
+  bottom: -205px;
   padding: 10px;
   z-index: 5;
   background: white;
   border-radius: 10px;
 }
+
+.makeBtn{
+  position: absolute;
+  right: 30px;
+  width: 120px;
+  height: 120px;
+  font-size: 20px;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 100%;
+}
+
 .addcontainer{
   padding:10px;
 }
+
 .groupManage{
   position:absolute;
-  width: 300px;
+  width: 310px;
   height: 150px;
   z-index: 3;
   left: 20px;
@@ -84,20 +108,21 @@ html, body {
   background: white;
   display: none;
 }
+
 .modal-header{
   background: lightgrey;
 }
+
 .modal-body{
   text-align: justify;
 }
 
-
 .slideleft {
-  transform: translateX(100px);
+  transform: translateX(120px);
 }
 
 .slideup {
-  transform: translateY(-200px);
+  transform: translateY(-205px);
 }
 
 .group-select, .rad-input {
@@ -110,5 +135,5 @@ html, body {
 }
 
 .rad-input {
-  width: 20%;
+  width: 250px;
 }

@@ -10,8 +10,8 @@
 
   <link rel="stylesheet" href="ds.css" type="text/css">
 
-
   <script type="text/javascript" src="http://map.vworld.kr/js/vworldMapInit.js.do?apiKey=105D3824-2650-30B0-A7DB-31972B097098"></script>
+
   <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 
   <!-- <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script> -->
@@ -26,8 +26,8 @@
       브이월드 맵 테스트
     </p>
   </div>
-  <div id="mainMap" class="map"></div><br />
 
+  <div id="mainMap" class="map"></div><br />
 
   <div id="mapCheckbox" class="left">
     <div>
@@ -35,7 +35,10 @@
     </div>
     <div>
       <p>
-        지도 종류
+        <strong>
+
+          지도 종류
+        </strong>
       </p>
       <div class="custom-control custom-radio">
         <input type="radio" class="custom-control-input" id="mode0" name="groupOfDefaultRadios" onclick="vworld.setMode(0)" checked>
@@ -48,7 +51,9 @@
       </div>
       <br />
       <p>
-        행정 구역
+        <strong>
+          행정 구역
+        </strong>
       </p>
       <div>
         <div class="custom-control custom-checkbox">
@@ -87,21 +92,27 @@
         <select id="mGroup" class="custom-control custom-select group-select">
 
         </select>
-        <!-- <div class="custom-control custom-radio">
-            <input type="radio" class="custom-control-input" id="rad" name="groupOfDefaultRadios" value=500  checked>
-            <label class="custom-control-label" for="rad">500m</label>
-            <input type="radio" class="custom-control-input" id="rad" name="groupOfDefaultRadios" value=1000  checked>
-            <label class="custom-control-label" for="rad">1,000m</label>
-            <input type="radio" class="custom-control-input" id="rad" name="groupOfDefaultRadios" value=2500  checked>
-            <label class="custom-control-label" for="rad">2,500m</label>
-          </div> -->
+        <div class="row">
+          <span>반지름: </span>
+          <div class="custom-control custom-radio">
+            <input type="radio" class="custom-control-input" name="rad" id="rad500" name="groupOfDefaultRadios" value=500 checked>
+            <label class="custom-control-label" for="rad500">500m</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" class="custom-control-input" name="rad" id="rad1000" name="groupOfDefaultRadios" value=1000>
+            <label class="custom-control-label" for="rad1000">1,000m</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" class="custom-control-input" name="rad" id="rad2500" name="groupOfDefaultRadios" value=2500>
+            <label class="custom-control-label" for="rad2500">2,500m</label>
+          </div>
 
+        </div>
+<!--
         <input type="text" id="rad" class="form-control rad-input" placeholder="반지름을 입력하세요(M)">
-        <!-- 반지름 라디오버튼으로 만들기.. -->
+         -->
+        <button class="btn btn-primary makeBtn" onclick="addMarkingEvent();">마커생성</button>
 
-
-        <button class="btn btn-primary" onclick="addMarkingEvent();">마커생성</button>
-        <button class="btn">실행취소</button>
       </div>
       <div class="row">
         <button id="groupBtn" class="btn" onclick="openPopup()">그룹관리</button>
@@ -128,16 +139,20 @@
             <button class="btn" onclick="removeGroup()">그룹 지우기</button>
           </div>
         </div>
-        <button class="btn" onclick="map.getPrintMap();">저장하기</button>
-        <button class="btn" onclick="resetAll();">초기화</button>
+        <button type="button" class="btn" onclick="mhide();">마커 숨기기</button>
+        <button type="button" class="btn" onclick="mshow();">마커 나타내기</button>
+        <button type="button" class="btn" onclick="mdelete();">마커 지우기</button>
       </div>
 
-      <select id="markerList" class="custom-control custom-select group-select">
-      </select>
-      <button type="button" class="btn" onclick="mhide();">마커 숨기기</button>
-      <button type="button" class="btn" onclick="mshow();">마커 나타내기</button>
-      <button type="button" class="btn" onclick="mdelete();">마커 지우기</button>
+      <div class="row">
+        <select id="markerList" class="custom-control custom-select" style="width: 80%">
+        </select>
+      </div>
 
+      <div class="row">
+        <button class="btn" onclick="map.getPrintMap();">이미지 저장하기</button>
+        <button class="btn" onclick="resetAll();">지도 초기화</button>
+      </div>
 
     </div>
 
