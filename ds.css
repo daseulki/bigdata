@@ -21,7 +21,7 @@ html, body {
   left: 50%;
   transform: translateX(-50%);
   z-index: 1;
-  bottom:2%;
+  bottom: 2%;
 }
 
 #upBtn, #leftBtn {
@@ -35,7 +35,7 @@ html, body {
   opacity: 0.2;
 }
 
-#upBtn:hover, #leftBtn:hover{
+#upBtn:hover, #leftBtn:hover {
   opacity: 1;
 }
 
@@ -59,16 +59,18 @@ html, body {
   left: -120px;
   border-radius: 10px;
 }
-.row{
-  margin:0;
+
+.row {
+  margin: 0;
   padding: 3px;
 }
-.addcontainer .row *{
+
+.addcontainer .row * {
   margin-right: 5px;
 }
 
-.addcontainer .row .groupManage *{
-  margin-right:  0;
+.addcontainer .row .groupManage * {
+  margin-right: 0;
 }
 
 .footer {
@@ -84,7 +86,7 @@ html, body {
   border-radius: 10px;
 }
 
-.makeBtn{
+.makeBtn {
   position: absolute;
   right: 20px;
   width: 100px;
@@ -95,12 +97,12 @@ html, body {
   border-radius: 100%;
 }
 
-.addcontainer{
-  padding:10px;
+.addcontainer {
+  padding: 10px;
 }
 
-.groupManage{
-  position:absolute;
+.groupManage {
+  position: absolute;
   width: 310px;
   height: 150px;
   z-index: 3;
@@ -110,11 +112,11 @@ html, body {
   display: none;
 }
 
-.modal-header{
+.modal-header {
   background: lightgrey;
 }
 
-.modal-body{
+.modal-body {
   text-align: justify;
 }
 

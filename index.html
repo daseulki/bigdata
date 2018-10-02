@@ -40,14 +40,15 @@
           지도 종류
         </strong>
       </p>
-      <div class="custom-control custom-radio">
-        <input type="radio" class="custom-control-input" id="mode0" name="groupOfDefaultRadios" onclick="vworld.setMode(0)" checked>
-        <label class="custom-control-label" for="mode0">배경지도</label>
-      </div>
-
-      <div class="custom-control custom-radio">
-        <input type="radio" class="custom-control-input" id="mode1" name="groupOfDefaultRadios" onclick="vworld.setMode(1)">
-        <label class="custom-control-label" for="mode1">항공지도</label>
+      <div class = "radio-group">
+        <div class="custom-control custom-radio">
+          <input type="radio" class="custom-control-input" id="mode0" name="groupOfDefaultRadios" onclick="vworld.setMode(0)" checked>
+          <label class="custom-control-label" for="mode0">배경지도</label>
+        </div>
+        <div class="custom-control custom-radio">
+          <input type="radio" class="custom-control-input" id="mode1" name="groupOfDefaultRadios" onclick="vworld.setMode(1)">
+          <label class="custom-control-label" for="mode1">항공지도</label>
+        </div>
       </div>
       <br />
       <p>
@@ -95,7 +96,7 @@
         <div class="row">
           <span>반지름: </span>
           <div class="custom-control custom-radio">
-            <input type="radio" class="custom-control-input" name="rad" id="rad500" name="groupOfDefaultRadios" value=500 >
+            <input type="radio" class="custom-control-input" name="rad" id="rad500" name="groupOfDefaultRadios" value=500>
             <label class="custom-control-label" for="rad500">500m</label>
           </div>
           <div class="custom-control custom-radio">
@@ -112,7 +113,7 @@
           </div>
 
         </div>
-<!--
+        <!--
         <input type="text" id="rad" class="form-control rad-input" placeholder="반지름을 입력하세요(M)">
          -->
         <button class="btn btn-primary makeBtn" onclick="addMarkingEvent();">마커생성</button>

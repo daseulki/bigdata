@@ -1,7 +1,9 @@
-///////////////////////////좌표환산/////////////////////////
-//ol.proj.transform([126.9380517322744,37.16792263658907], 'EPSG:4326', 'EPSG:900913')
-////////////////////////////////////////////////////////////
+///////////////////////////////////MAP TEST (only frontend)
+///////////////////////////////////////////////////////////
 
+
+/////////////////////////////////////////Declare Variable
+//////////////////////////////////////////////////////////
 
 let SOPPlugin
 let map = null;
@@ -17,8 +19,6 @@ let myradius = 1000; //초기값
 let num = 0;
 let groupNum = 0;
 let add = "";
-
-
 
 /////////////////////////////////////////////////화면 그리기
 ///////////////////////////////////////////////////////////
@@ -37,7 +37,6 @@ vworld.init(
     //     map.events.unregister('click', map, map.onMapClicked);
     // //신규 클릭이벤트 부여
     //     map.events.register('click', map, addMarkingEvent);
-
   },
   function(obj) {
     SOPPlugin = obj;
@@ -74,7 +73,8 @@ function setTestProxy() {
   alert(OpenLayers.ProxyHost);
 }
 
-/////////////////////////////////////////css 조절
+////////////////////////////////////////////css 조절
+////////////////////////////////////////////////////
 
 function slideLeft() {
   let btn = document.getElementById('mapCheckbox');
@@ -94,37 +94,6 @@ function openPopup() {
 
 function closePopup() {
   modal.style.display = "none";
-}
-
-function confirmGroup(){
-  // let mGroup = document.getElementById("mGroup");
-  // let mMGroup = document.getElementById("mMGroup");
-  // let copyGroup = mMGroup;
-  // for (let i=0;i<mMGroup.options.length;i++){
-  //   mGroup.add(copyGroup.options[i],mGroup[i]);
-  // }
-  let mGroup = document.getElementById("mGroup");
-  let mMGroup = document.getElementById("mMGroup");
-  let markOption;
-
-  if ( mGroup.options.length == 0){
-    for(let i=0 ; i<mMGroup.options.length ; i++){
-      markOption = document.createElement("option");
-      console.log("option: "+mMGroup.options[i].value);
-      markOption.text = mMGroup.options[i].text;
-      markOption.value = mMGroup.options[i].value;
-      mGroup.add(markOption,mGroup[i]);
-    }
-  }
-  else{
-    for(let i=mGroup.length ; i<mMGroup.options.length ; i++){
-      markOption = document.createElement("option");
-      console.log("option: "+mMGroup.options[i].value);
-      markOption.text = mMGroup.options[i].text;
-      markOption.value = mMGroup.options[i].value;
-      mGroup.add(markOption,mGroup[i]);
-    }
-  }
 }
 
 ////////////////////////////////////////////////////////////마커 이벤트
@@ -156,7 +125,7 @@ function mClick(event) {
   let temp = event.geometry; //마커 클릭이벤트시 나오는 좌표
   let pos = new OpenLayers.LonLat(temp.x, temp.y); //좌표값 셋팅
 
-  if(groupMarker == null){
+  if (groupMarker == null) {
     groupMarker = new vworld.GroupMarker('lora');
     groupMarker = new vworld.GroupMarker('wifi');
     groupMarker = new vworld.GroupMarker('ble');
@@ -209,7 +178,7 @@ function colorChange(group) {
 
 function addMarker(group, lon, lat, message, imgurl) {
   setRadius();
-  console.log("set Radius x:" + lon+ ", y: "+lat);
+  console.log("set Radius x:" + lon + ", y: " + lat);
   let scope = {
     circle: new vworld.Circle({
       x: lon,
@@ -222,10 +191,10 @@ function addMarker(group, lon, lat, message, imgurl) {
   console.log(marker);
   let num = 0;
   // 마커 아이콘 이미지 파일명 설정합니다.
-  if(tempMarker.length !== 0){
-    num = tempMarker[tempMarker.length-1].id + 1;
+  if (tempMarker.length !== 0) {
+    num = tempMarker[tempMarker.length - 1].id + 1;
   }
-  console.log("now marker id is "+num);
+  console.log("now marker id is " + num);
 
   if (typeof imgurl == 'string') {
     marker.setIconImage(imgurl);
@@ -254,12 +223,35 @@ function addOption(optionText) {
   num += 1;
 }
 
+function confirmGroup() {
 
+  let mGroup = document.getElementById("mGroup");
+  let mMGroup = document.getElementById("mMGroup");
+  let markOption;
+
+  if (mGroup.options.length == 0) {
+    for (let i = 0; i < mMGroup.options.length; i++) {
+      markOption = document.createElement("option");
+      console.log("option: " + mMGroup.options[i].value);
+      markOption.text = mMGroup.options[i].text;
+      markOption.value = mMGroup.options[i].value;
+      mGroup.add(markOption, mGroup[i]);
+    }
+  } else {
+    for (let i = mGroup.length; i < mMGroup.options.length; i++) {
+      markOption = document.createElement("option");
+      console.log("option: " + mMGroup.options[i].value);
+      markOption.text = mMGroup.options[i].text;
+      markOption.value = mMGroup.options[i].value;
+      mGroup.add(markOption, mGroup[i]);
+    }
+  }
+}
 
 ///////////////////////////////////////////////////////마커 수정..
 //////////////////////////////////////////////////////////////////
 
-function addGroup(){  //그룹 대체 왜안되냐.. 캐싱 에러 대체 뭐야..
+function addGroup() { //그룹 대체 왜안되냐.. 캐싱 에러 대체 뭐야..
 
   let mMGroup = document.getElementById("mMGroup");
   let markOption = document.createElement("option");
@@ -267,7 +259,7 @@ function addGroup(){  //그룹 대체 왜안되냐.. 캐싱 에러 대체 뭐야
 
   markOption.text = groupName;
   markOption.value = groupNum;
-  mMGroup.add(markOption,mMGroup[groupNum]);
+  mMGroup.add(markOption, mMGroup[groupNum]);
   groupNum += 1;
   console.log("group id: " + groupNum)
 }
@@ -300,16 +292,16 @@ function removeGroup() {
   for (let i = 0; i < tempScope.length; i++) {
     if (tempScope[i].groupName == groupName) {
       map.vectorLayer.removeFeatures(tempScope[i].circle);
-      for (let j =0; j<markerList.options.length;j++){
-        if(markerList.options[j].value == i){
+      for (let j = 0; j < markerList.options.length; j++) {
+        if (markerList.options[j].value == i) {
           markerList.options[j] = null;
-          console.log( i+"번에 있는 "+ markerList.options[i] + " 지웠다.")
+          console.log(i + "번에 있는 " + markerList.options[i] + " 지웠다.")
         }
       }
     }
   }
   groupMarker = new vworld.GroupMarker(groupName);
-  console.log("remake "+groupName +", next num is "+ num);
+  console.log("remake " + groupName + ", next num is " + markerList.options.length);
 }
 
 
@@ -329,8 +321,10 @@ function mshow() {
 
 function mdelete() { ////////고쳐야됨!!!!!!!!!!!!!!!!!
   let checkedOption = document.getElementById("markerList").value
+  //tempMarker[checkedOption].erase();
+  let marker = map.getMarker(checkedOption);
 
-  tempMarker[checkedOption].erase();
+  map.userMarkers.removeMarker(marker);
   console.log(tempMarker[checkedOption] + "에서 splice 실행");
   tempMarker.splice(checkedOption, 1);
   console.log(groupMarker);
@@ -343,11 +337,14 @@ function mdelete() { ////////고쳐야됨!!!!!!!!!!!!!!!!!
 }
 
 function resetAll() {
-  console.log(tempMarker);
-
   map.initAll();
-  num = 0;
   markerList.options.length = 0;
+  groupMarker.removeGroup('lora');
+  groupMarker.removeGroup('wifi');
+  groupMarker.removeGroup('ble');
+  groupMarker = null;
+  tempMarker = new Array();
+  num = 0;
 }
 
 function saveImg() {
@@ -408,3 +405,7 @@ let geocoder_reverse = function(x, y) {
 
   });
 }
+
+///////////////////////////좌표환산/////////////////////////
+//ol.proj.transform([126.9380517322744,37.16792263658907], 'EPSG:4326', 'EPSG:900913')
+////////////////////////////////////////////////////////////
