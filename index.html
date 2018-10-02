@@ -83,24 +83,28 @@
     <div class="addcontainer">
       <div class="row">
 
-
         <select id="markerGroup" class="custom-control custom-select group-select">
           <option value="lora" selected>LoRa</option>
           <option value="wifi">Wifi</option>
           <option value="ble">BLE</option>
         </select>
-        <select id="mGroup" class="custom-control custom-select group-select">
 
+        <select id="mGroup" class="custom-control custom-select group-select">
         </select>
+
         <div class="row">
           <span>반지름: </span>
           <div class="custom-control custom-radio">
-            <input type="radio" class="custom-control-input" name="rad" id="rad500" name="groupOfDefaultRadios" value=500 checked>
+            <input type="radio" class="custom-control-input" name="rad" id="rad500" name="groupOfDefaultRadios" value=500 >
             <label class="custom-control-label" for="rad500">500m</label>
           </div>
           <div class="custom-control custom-radio">
-            <input type="radio" class="custom-control-input" name="rad" id="rad1000" name="groupOfDefaultRadios" value=1000>
+            <input type="radio" class="custom-control-input" name="rad" id="rad1000" name="groupOfDefaultRadios" value=1000 checked>
             <label class="custom-control-label" for="rad1000">1,000m</label>
+          </div>
+          <div class="custom-control custom-radio">
+            <input type="radio" class="custom-control-input" name="rad" id="rad2000" name="groupOfDefaultRadios" value=2000>
+            <label class="custom-control-label" for="rad2000">2,000m</label>
           </div>
           <div class="custom-control custom-radio">
             <input type="radio" class="custom-control-input" name="rad" id="rad2500" name="groupOfDefaultRadios" value=2500>
@@ -120,7 +124,7 @@
         <div id="groupModal" class="groupManage">
           <div class="modal-header">
             <p>그룹 관리</p>
-            <span class="close" onclick="closePopup()">&times;</span>
+            <span class="close" onclick="closePopup(),confirmGroup()">&times;</span>
           </div>
           <div class="modal-content">
             <div class="row">
@@ -145,7 +149,7 @@
       </div>
 
       <div class="row">
-        <select id="markerList" class="custom-control custom-select" style="width: 80%">
+        <select id="markerList" class="custom-control custom-select" style="width: 75%">
         </select>
       </div>
 
