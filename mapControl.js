@@ -9,8 +9,8 @@ let SOPPlugin
 let map = null;
 vworld.showMode = false;
 let mControl; //마커이벤트변수
-let tempMarker = new Array(); //임시마커
-let tempScope = new Array();
+let tempMarker ; //임시마커
+let tempScope = [];
 let groupMarker;
 let groupName;
 const modal = document.getElementById('groupModal');
@@ -177,6 +177,9 @@ function colorChange(group) {
 }
 
 function addMarker(group, lon, lat, message, imgurl) {
+  let marker = groupMarker.addMarker(group, lon, lat, message, "");
+
+  // 마커 아이콘 이미지 파일명 설정합니다.
   setRadius();
   console.log("set Radius x:" + lon + ", y: " + lat);
   let scope = {
@@ -184,17 +187,11 @@ function addMarker(group, lon, lat, message, imgurl) {
       x: lon,
       y: lat
     }, myradius, colorChange(group)),
-    groupName: group
+    groupName: group,
+    index: num
   };
-
-  let marker = groupMarker.addMarker(group, lon, lat, message, "");
-  console.log(marker);
-  let num = 0;
-  // 마커 아이콘 이미지 파일명 설정합니다.
-  if (tempMarker.length !== 0) {
-    num = tempMarker[tempMarker.length - 1].id + 1;
-  }
-  console.log("now marker id is " + num);
+  //scope.circle.marker = marker;
+  console.log(scope);
 
   if (typeof imgurl == 'string') {
     marker.setIconImage(imgurl);
@@ -202,14 +199,16 @@ function addMarker(group, lon, lat, message, imgurl) {
 
   // 마커의 z-Index 설정
   marker.setZindex(3);
-  marker.id = num;
+  //marker.id = num;
+  // marker.desc = group;
   // marker.setDragMode(true);
+  console.log(marker);
   map.addMarker(marker);
-  tempMarker[num] = marker;
+  tempMarker = marker;
   console.log("just insert marker to tempMarker Array");
 
   tempScope[num] = scope;
-  console.log("방금 생성한 마커 오브젝트 id: " + tempMarker[num].id); //OBJ반환
+  console.log("방금 생성한 마커 오브젝트 id: " + tempMarker.id); //OBJ반환
 }
 
 function addOption(optionText) {
@@ -306,33 +305,45 @@ function removeGroup() {
 
 
 function mhide() {
-  let checkedOption = document.getElementById("markerList").value;
-  tempMarker[checkedOption].hide();
-  tempScope[checkedOption].circle.setFillOpacity(0);
-  tempScope[checkedOption].circle.setOpacity(0);
+  let checkedOption = $("#markerList option").index($("#markerList option:selected"));
+  let marker =  map.userMarkers.markers[checkedOption];
+  let optionVal = document.getElementById("markerList").value;
+  marker.hide();
+  tempScope[optionVal].circle.setFillOpacity(0);
+  tempScope[optionVal].circle.setOpacity(0);
 }
 
 function mshow() {
-  let checkedOption = document.getElementById("markerList").value;
-  tempMarker[checkedOption].show();
-  tempScope[checkedOption].circle.setFillOpacity(0.2);
-  tempScope[checkedOption].circle.setOpacity(0.6);
+  let checkedOption = $("#markerList option").index($("#markerList option:selected"));
+  let marker =  map.userMarkers.markers[checkedOption];
+  let optionVal = document.getElementById("markerList").value;
+  marker.show();
+  tempScope[optionVal].circle.setFillOpacity(0.2);
+  tempScope[optionVal].circle.setOpacity(0.6);
 }
 
 function mdelete() { ////////고쳐야됨!!!!!!!!!!!!!!!!!
-  let checkedOption = document.getElementById("markerList").value
-  //tempMarker[checkedOption].erase();
-  let marker = map.getMarker(checkedOption);
+  let checkedOption = $("#markerList option").index($("#markerList option:selected"));
+  let optionVal = document.getElementById("markerList").value;
+  // let group = document.getElementById("markerList").options[checkedOption].innerHTML.slice(8,12);
+  let marker =  map.userMarkers.markers[checkedOption];
+  // map.getMarker(checkedOption);
 
+  // map.getLayerByName(group).markers[checkedOption].hide();
+  // map.getLayerByName(group).markers.splice(checkedOption,1);
+
+  //tempMarker[checkedOption].erase();
+
+  //console.log(tempMarker[checkedOption] + "에서 splice 실행");
+  //tempMarker.splice(checkedOption, 1);
+
+  map.vectorLayer.removeFeatures(tempScope[optionVal].circle);
+  // console.log("원지우기함")
+  groupMarker.removeMarker(marker.id);
   map.userMarkers.removeMarker(marker);
-  console.log(tempMarker[checkedOption] + "에서 splice 실행");
-  tempMarker.splice(checkedOption, 1);
-  console.log(groupMarker);
-  map.vectorLayer.removeFeatures(tempScope[checkedOption].circle);
-  console.log("원지우기함")
   // markerList.option[checkedOption] = null;
   markerList.remove(checkedOption);
-  console.log("옵션에서 삭제완료")
+  // console.log("옵션에서 삭제완료")
 
 }
 
@@ -343,7 +354,8 @@ function resetAll() {
   groupMarker.removeGroup('wifi');
   groupMarker.removeGroup('ble');
   groupMarker = null;
-  tempMarker = new Array();
+  tempMarker = null;
+  tempScope = new Array();
   num = 0;
 }
 
@@ -351,6 +363,37 @@ function saveImg() {
   map.getPrintMap();
 }
 
+
+/*좌표 -> 주소*/
+let geocoder_reverse = function(x, y) {
+  $.ajax({
+    type: "get",
+    url: "http://api.vworld.kr/req/address?service=address&version=2.0&request=getaddress&format=json&type=parcel&crs=epsg:900913",
+    data: {
+      apiKey: $('[name=apiKey]').val(),
+      point: x + "," + y
+    },
+    dataType: 'jsonp',
+    success: function(data) {
+      let geoResult = "";
+      for (i in data.response.result) {
+        geoResult += data.response.result[i].text;
+      }
+      // $('#loading').text(geoResult);
+      let msg = num + 1 + "번 마커 <br>" + geoResult + "<br>x: " + x + "<br>y: " + y;
+      let group = document.getElementById("markerGroup").value;
+      let optionText = num + 1 + "번 마커: [" + group + "] " + geoResult;
+      addMarker(group, x, y, msg, null);
+      console.log("addMarker 실행완료");
+      addOption(optionText);
+      console.log("addOption 완료...");
+
+    },
+    // beforeSend: function() {},
+    error: function(xhr, stat, err) {}
+
+  });
+}
 /*주소 -> 좌표*/
 let geocoder = function(name) {
   $.ajax({
@@ -375,37 +418,19 @@ let geocoder = function(name) {
   });
 }
 
-/*좌표 -> 주소*/
-let geocoder_reverse = function(x, y) {
-  $.ajax({
-    type: "get",
-    url: "http://api.vworld.kr/req/address?service=address&version=2.0&request=getaddress&format=json&type=parcel&crs=epsg:900913",
-    data: {
-      apiKey: $('[name=apiKey]').val(),
-      point: x + "," + y
-    },
-    dataType: 'jsonp',
-    success: function(data) {
-      let geoResult = "";
-      for (i in data.response.result) {
-        geoResult += data.response.result[i].text;
-      }
-      // $('#loading').text(geoResult);
-      let msg = num + 1 + "번 마커 <br>" + geoResult + "<br>x: " + x + "<br>y: " + y;
-      let group = document.getElementById("markerGroup").value;
-      let optionText = num + 1 + "번 마커:[" + group + "] " + geoResult;
-      addMarker(group, x, y, msg, null);
-      console.log("addMarker 실행완료");
-      addOption(optionText);
-      console.log("addOption 완료...");
-
-    },
-    // beforeSend: function() {},
-    error: function(xhr, stat, err) {}
-
-  });
-}
-
 ///////////////////////////좌표환산/////////////////////////
 //ol.proj.transform([126.9380517322744,37.16792263658907], 'EPSG:4326', 'EPSG:900913')
 ////////////////////////////////////////////////////////////
+
+// function(markerId){
+//   var groupName = document.getElementById("markerList").options[checkedOption].innerHTML.slice(8,12);
+//   for(var i=0;i<map.getLayerByName(groupName).markers.length;i++){
+//     if(markerId==map.getLayerByName(groupName).markers[i].id){
+//       if(map.getLayerByName(groupName).markers[i].popup!=null){
+//         map.getLayerByName(groupName).markers[i].popup.hide();
+//       }
+//       map.getLayerByName(groupName).markers[i].hide();
+//       map.getLayerByName(groupName).markers.splice(i,1);
+//     }
+//   }
+// }
