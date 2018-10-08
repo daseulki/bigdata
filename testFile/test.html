@@ -1,3 +1,27 @@
+<!-- Rest Parameters
+소위 말하는 가변인자를 말한다. 이전 자바스크립트에서는 arguments 를 사용해서 인자들을 추출 하였다.
+
+function arguments() {
+    for (var i=0; i < arguments.length; i++) {
+        console.log(arguments[i]);
+    }
+}
+하지만 이제 그럴 필요 없다. ...을 사용하면 된다.
+
+function arguments(...args) {
+    for (let arg of args) {
+        console.log(arg);
+    }
+}
+간단하게 가변인자를 가져올 수 있다. 참고로 of라는 키워드로 다른 언어들의 forEach와 같이 값들을 바로 가져올 수 있다. 이 것도 아마 es6에 추가된 걸로 알고 있다.
+
+
+
+ -->
+
+
+
+
 <!-- <!doctype html>
 <html lang="en">
   <head>

@@ -68,9 +68,13 @@
           <input type="checkbox" id="eub" class="custom-control-input" name="addcache" onclick="addThemeLayer('읍면동','LT_C_ADEMD')" />
           <label class="custom-control-label" for="eub"> 읍면동</label><br />
         </div>
+        <!-- <div class="custom-control custom-checkbox">
+          <input type="checkbox" id="jijuk" class="custom-control-input" name="addcache" onclick="addTileCache()" />
+          <label class="custom-control-label" for="jijuk">산사태위험지도</label><br />
+        </div> -->
         <div class="custom-control custom-checkbox">
-          <input type="checkbox" id="jijuk" class="custom-control-input" name="addcache" />
-          <label class="custom-control-label" for="jijuk"> 지적도</label><br />
+          <input type="checkbox" id="cctv" class="custom-control-input" name="addcache" onclick="" />
+          <label class="custom-control-label" for="cctv"> 교통CCTV</label><br />
         </div>
       </div>
     </div>
@@ -170,8 +174,9 @@
 
         <div class="row">
           <select name="category" class="custom-control custom-select group-select">
-            <option value="poi">poi</option>
-            <option value="Juso">address</option>
+            <option value="poi">장소</option>
+            <option value="Juso">도로명주소</option>
+            <option value="Jibun">지번주소</option>
           </select>
           <input type="text" id="searchValue" class="form-control" name="q" placeholder="검색 기능 아직 안됩니다요.." style="width: 60%" />
           <button onclick="search()" class="btn">검색</button>
