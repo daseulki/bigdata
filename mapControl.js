@@ -191,7 +191,7 @@ let colorChange = function(group) {
 
 let addMarker = function(group, lon, lat, message, imgurl) {
   let marker = groupMarker.addMarker(group, lon, lat, message, "");
-
+  let num = tempScope.length;
   // 마커 아이콘 이미지 파일명 설정합니다.
   setRadius();
   console.log("set Radius x:" + lon + ", y: " + lat);
@@ -216,14 +216,14 @@ let addMarker = function(group, lon, lat, message, imgurl) {
   marker.desc = userGroup.innerHTML;
 
     // marker.setDragMode(true);
-  console.log(marker);
+  //console.log(marker);
   map.addMarker(marker);
   tempMarker = marker;
   console.log("just insert marker to tempMarker Array");
 
   tempScope[num] = scope;
   console.log("방금 생성한 마커 오브젝트 id: " + tempMarker.id); //OBJ반환
-
+  
 }
 
 let addOption = function(optionText) {
@@ -234,7 +234,7 @@ let addOption = function(optionText) {
   markOption.value = num; //checkedOption으로 접근
   markList.add(markOption, markList[num]);
   console.log("addOption: " + optionText);
-  num += 1;
+
 }
 
 let confirmGroup = function() {
@@ -339,24 +339,42 @@ let removeGroup = function() {
   // }
 
   //////////////////////////////ES5
-  for (let i = 0; i < tempScope.length; i++) {
-    if (tempScope[i].groupName == groupName) {
-      map.vectorLayer.removeFeatures(tempScope[i].circle);
-      tempScope[i].groupName = " ";
 
+  let delScope = [];
+
+  for (let i = 0; i < tempScope.length; i++) {
+    if (tempScope[i].groupName === groupName) {
+      map.vectorLayer.removeFeatures(tempScope[i].circle);
+      delScope.push(i);
       for (let j = 0; j < markerList.options.length; j++) {
         if (markerList.options[j].value == i) {
           markerList.options[j] = null;
         }
       }
     }
+  } 
+  console.log("스코프 지우는 배열: "+ delScope);
+
+  for(let i = 0 ; i<delScope.length;i++){
+    tempScope.splice(delScope[i],1);
   }
+
+    // while(true){
+    //   let findCircle = tempScope.find(function(item){return item.groupName === " "})
+    //   let search = tempScope.indexOf(findCircle);
+    //   if(search!=-1){
+    //       tempScope.splice(search,1); 
+    //   }else{
+    //       break;
+    //   }
+    // }
+  
 
   for (let i = 0; i < marker.length; i++){
     if (marker[i].id.slice(0,4) == groupName){
       groupMarker.removeMarker(marker[i].id);
       map.userMarkers.removeMarker(marker[i]);
-      console.log(marker[i]);
+      // console.log(marker[i]);
     }
   }
 
@@ -370,24 +388,24 @@ let removeGroup = function() {
  let mhide = function() {
   let checkedOption = $("#markerList option").index($("#markerList option:selected"));
   let marker =  map.userMarkers.markers[checkedOption];
-  let optionVal = document.getElementById("markerList").value;
+  //let optionVal = document.getElementById("markerList").value;
   marker.hide();
-  tempScope[optionVal].circle.setFillOpacity(0);
-  tempScope[optionVal].circle.setOpacity(0);
+  tempScope[checkedOption].circle.setFillOpacity(0);
+  tempScope[checkedOption].circle.setOpacity(0);
 }
 
 let mshow = function() {
   let checkedOption = $("#markerList option").index($("#markerList option:selected"));
   let marker =  map.userMarkers.markers[checkedOption];
-  let optionVal = document.getElementById("markerList").value;
+  //let optionVal = document.getElementById("markerList").value;
   marker.show();
-  tempScope[optionVal].circle.setFillOpacity(0.2);
-  tempScope[optionVal].circle.setOpacity(0.6);
+  tempScope[checkedOption].circle.setFillOpacity(0.2);
+  tempScope[checkedOption].circle.setOpacity(0.6);
 }
 
 let mdelete = function() { ////////고쳐야됨!!!!!!!!!!!!!!!!!
   let checkedOption = $("#markerList option").index($("#markerList option:selected"));
-  let optionVal = document.getElementById("markerList").value;
+  //let optionVal = document.getElementById("markerList").value;
   // let group = document.getElementById("markerList").options[checkedOption].innerHTML.slice(8,12);
   let marker =  map.userMarkers.markers[checkedOption];
   // map.getMarker(checkedOption);
@@ -400,7 +418,8 @@ let mdelete = function() { ////////고쳐야됨!!!!!!!!!!!!!!!!!
   //console.log(tempMarker[checkedOption] + "에서 splice 실행");
   //tempMarker.splice(checkedOption, 1);
 
-  map.vectorLayer.removeFeatures(tempScope[optionVal].circle);
+  map.vectorLayer.removeFeatures(tempScope[checkedOption].circle);
+  tempScope.splice(checkedOption,1);
   // console.log("원지우기함")
   groupMarker.removeMarker(marker.id);
   map.userMarkers.removeMarker(marker);
@@ -451,7 +470,7 @@ let geocoder_reverse = function(x, y) {
       console.log("addMarker 실행완료");
       addOption(optionText);
       console.log("addOption 완료...");
-
+      num +=1;
     },
     // beforeSend: function() {},
     error: function(xhr, stat, err) {}
