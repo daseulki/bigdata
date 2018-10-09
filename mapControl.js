@@ -37,10 +37,6 @@ vworld.init(
     });
     map.addVWORLDControl("zoomBar")
     map.setCenterAndZoom(14125792.221619, 4506789.1730147, 14);
-    //     //기존 클릭이벤트 해제
-    //     map.events.unregister('click', map, map.onMapClicked);
-    // //신규 클릭이벤트 부여
-    //     map.events.register('click', map, addMarkingEvent);
   },
   function(obj) {
     SOPPlugin = obj;
@@ -191,8 +187,7 @@ let colorChange = function(group) {
 
 let addMarker = function(group, lon, lat, message, imgurl) {
   let marker = groupMarker.addMarker(group, lon, lat, message, "");
-  let num = tempScope.length;
-  // 마커 아이콘 이미지 파일명 설정합니다.
+
   setRadius();
   console.log("set Radius x:" + lon + ", y: " + lat);
   let scope = {
@@ -221,7 +216,7 @@ let addMarker = function(group, lon, lat, message, imgurl) {
   tempMarker = marker;
   console.log("just insert marker to tempMarker Array");
 
-  tempScope[num] = scope;
+  tempScope.push(scope);
   console.log("방금 생성한 마커 오브젝트 id: " + tempMarker.id); //OBJ반환
   
 }
@@ -311,12 +306,6 @@ let removeGroup = function() {
   let groupName = document.getElementById('mMarkerGroup').value;
   let marker = map.userMarkers.markers;
 
-  // map.userMarkers.markers.splice(i,1);
-
-  // function removeChars(element,index,array){
-  //     return (element.groupName !== groupName);
-  // }
-  //
 
   //////////////////////////// ES6.. 익스에서 안되네..
   // for (const curScope of tempScope){
@@ -359,16 +348,6 @@ let removeGroup = function() {
     tempScope.splice(delScope[i],1);
   }
 
-    // while(true){
-    //   let findCircle = tempScope.find(function(item){return item.groupName === " "})
-    //   let search = tempScope.indexOf(findCircle);
-    //   if(search!=-1){
-    //       tempScope.splice(search,1); 
-    //   }else{
-    //       break;
-    //   }
-    // }
-  
 
   for (let i = 0; i < marker.length; i++){
     if (marker[i].id.slice(0,4) == groupName){
@@ -520,77 +499,17 @@ let search = function(){
         dataType: 'jsonp',
         async: false,
         success: function(data) {
-            for(let o in data.LIST){
-                if(o==0){
-                    move(data.LIST[o].xpos*1,data.LIST[o].ypos*1);
-                }
 
-                features[o] = new ol.Feature({
-                    geometry: new ol.geom.Point(ol.proj.transform([ data.LIST[o].xpos*1,data.LIST[o].ypos*1],'EPSG:4326', "EPSG:900913")),
-                    juso: data.LIST[o].juso,
-                    RD_NM: data.LIST[o].RD_NM,
-                    ZIP_CL: data.LIST[o].ZIP_CL,
-                    nameDp: data.LIST[o].nameDp,
-                    nameFull: data.LIST[o].nameFull,
-                    njuso: data.LIST[o].njuso
-                });
-                features[o].set("codeName",data.LIST[o].codeName);
-            }
-
-            let vectorSource = new ol.source.Vector({
-                  features: features
-            });
-
-            let clusterSource = new ol.source.Cluster({
-                distance: parseInt(10, 10),
-                source: vectorSource
-            });
-
-            let clusters = new ol.layer.Vector({
-                source: clusterSource,
-                style: function(feature) {
-                    let size = feature.get('features').length;
-                    let style = styleCache[size];
-                    if (!style) {
-                        style = new ol.style.Style({
-                        image: new ol.style.Circle({
-                            radius: 10,
-                            stroke: new ol.style.Stroke({
-                              color: '#fff'
-                            }),
-                            fill: new ol.style.Fill({
-                              color: '#3399CC'
-                            })
-                        }),
-                        text: new ol.style.Text({
-                          text: size.toString(),
-                          fill: new ol.style.Fill({
-                            color: '#fff'
-                          })
-                        })
-                      });
-                      styleCache[size] = style;
-                    }
-                    return style;
-                }
-            });
-
-            /*
-                기존검색결과를 제거하기 위해 키 값 생성
-            */
-            clusters.set("cluster","search_cluster")
-
-            map.getLayersBy().forEach(function(layer){
-                if(layer.get("cluster")=="search_cluster"){
-                    map.removeLayer(layer);
-                }
-            });
-
-            map.addLayer(clusters);
+          console.log(data);
+          for(let o in data.LIST){
+            let xy = ol.proj.transform([data.LIST[o].xpos*1, data.LIST[o].ypos*1],'EPSG:4326', "EPSG:900913");
+            let x = xy[0];
+            let y = xy[1];
+            move(x,y)
+          }
         },
         error: function(xhr, stat, err) {}
     });
-
 
 }
 
@@ -599,7 +518,6 @@ let move = function(x,y){//127.10153, 37.402566
     // map.getView().setCenter(ol.proj.transform([ x, y ],'EPSG:4326', "EPSG:900913")); // 지도 이동
     // map.getView().setZoom(12);
 }
-
 
 ///////////////////////////////////////////////////////////파일생성
 ///////////////////////////////////////////////////////////////////
