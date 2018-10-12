@@ -11,8 +11,8 @@ let SOPPlugin
 let map = null;
 vworld.showMode = false;
 let mControl; //마커이벤트변수
-let tempMarker ; //임시마커
-let tempScope = new Array();
+let tempMarker; //임시마커
+let tempScope = [];
 let groupMarker;
 let groupName;
 let userGroup;
@@ -69,7 +69,7 @@ function addTileCache() {
   });
 }
 
-let setTestProxy =  function() {
+let setTestProxy = function() {
   alert(OpenLayers.ProxyHost);
 }
 
@@ -126,10 +126,10 @@ let mClick = function(event) {
   let checkedOption = $("#mGroup option").index($("#mGroup option:selected"));
   userGroup = mMGroup.options[checkedOption];
 
-  if (userGroup == null){
+  if (userGroup == null) {
     alert("사용자 그룹이 지정되지 않았습니다. 그룹을 추가해주세요.");
 
-  }else{
+  } else {
     let temp = event.geometry; //마커 클릭이벤트시 나오는 좌표
     let pos = new OpenLayers.LonLat(temp.x, temp.y); //좌표값 셋팅
 
@@ -189,7 +189,7 @@ let addMarker = function(group, lon, lat, message, imgurl) {
   let marker = groupMarker.addMarker(group, lon, lat, message, "");
 
   setRadius();
-  console.log("set Radius x:" + lon + ", y: " + lat);
+  //onsole.log("set Radius x:" + lon + ", y: " + lat);
   let scope = {
     circle: new vworld.Circle({
       x: lon,
@@ -198,7 +198,7 @@ let addMarker = function(group, lon, lat, message, imgurl) {
     groupName: group
   };
   //scope.circle.marker = marker;
-  console.log(scope);
+  //console.log(scope);
 
   if (typeof imgurl == 'string') {
     marker.setIconImage(imgurl);
@@ -210,15 +210,15 @@ let addMarker = function(group, lon, lat, message, imgurl) {
 
   marker.desc = userGroup.innerHTML;
 
-    // marker.setDragMode(true);
+  // marker.setDragMode(true);
   //console.log(marker);
   map.addMarker(marker);
   tempMarker = marker;
-  console.log("just insert marker to tempMarker Array");
+  //console.log("just insert marker to tempMarker Array");
 
   tempScope.push(scope);
   console.log("방금 생성한 마커 오브젝트 id: " + tempMarker.id); //OBJ반환
-  
+
 }
 
 let addOption = function(optionText) {
@@ -273,7 +273,7 @@ let addGroup = function() {
   console.log("group id: " + groupNum);
 }
 
-let delGroup = function(){
+let delGroup = function() {
   let checkedOption = $("#mMGroup option").index($("#mMGroup option:selected"));
   mMGroup.options[checkedOption] = null;
   mGroup.options[checkedOption] = null;
@@ -341,16 +341,16 @@ let removeGroup = function() {
         }
       }
     }
-  } 
-  console.log("스코프 지우는 배열: "+ delScope);
+  }
+  console.log("스코프 지우는 배열: " + delScope);
 
-  for(let i = 0 ; i<delScope.length;i++){
-    tempScope.splice(delScope[i],1);
+  for (let i = 0; i < delScope.length; i++) {
+    tempScope.splice(delScope[i], 1);
   }
 
 
-  for (let i = 0; i < marker.length; i++){
-    if (marker[i].id.slice(0,4) == groupName){
+  for (let i = 0; i < marker.length; i++) {
+    if (marker[i].id.slice(0, 4) == groupName) {
       groupMarker.removeMarker(marker[i].id);
       map.userMarkers.removeMarker(marker[i]);
       // console.log(marker[i]);
@@ -364,49 +364,35 @@ let removeGroup = function() {
 }
 
 
- let mhide = function() {
-  let checkedOption = $("#markerList option").index($("#markerList option:selected"));
-  let marker =  map.userMarkers.markers[checkedOption];
-  //let optionVal = document.getElementById("markerList").value;
-  marker.hide();
-  tempScope[checkedOption].circle.setFillOpacity(0);
-  tempScope[checkedOption].circle.setOpacity(0);
+let checked = function(){
+  const checkedOption = $("#markerList option").index($("#markerList option:selected"));
+  const marker = map.userMarkers.markers[checkedOption];
+  return {num: checkedOption, marker: marker};
+}
+
+let mhide = function() {
+
+  checked().marker.hide();
+  tempScope[checked().num].circle.setFillOpacity(0);
+  tempScope[checked().num].circle.setOpacity(0);
 }
 
 let mshow = function() {
-  let checkedOption = $("#markerList option").index($("#markerList option:selected"));
-  let marker =  map.userMarkers.markers[checkedOption];
-  //let optionVal = document.getElementById("markerList").value;
-  marker.show();
-  tempScope[checkedOption].circle.setFillOpacity(0.2);
-  tempScope[checkedOption].circle.setOpacity(0.6);
+
+  checked().marker.show();
+  tempScope[checked().num].circle.setFillOpacity(0.2);
+  tempScope[checked().num].circle.setOpacity(0.6);
 }
 
 let mdelete = function() { ////////고쳐야됨!!!!!!!!!!!!!!!!!
-  let checkedOption = $("#markerList option").index($("#markerList option:selected"));
-  //let optionVal = document.getElementById("markerList").value;
-  // let group = document.getElementById("markerList").options[checkedOption].innerHTML.slice(8,12);
-  let marker =  map.userMarkers.markers[checkedOption];
-  // map.getMarker(checkedOption);
 
-  // map.getLayerByName(group).markers[checkedOption].hide();
-  // map.getLayerByName(group).markers.splice(checkedOption,1);
-
-  //tempMarker[checkedOption].erase();
-
-  //console.log(tempMarker[checkedOption] + "에서 splice 실행");
-  //tempMarker.splice(checkedOption, 1);
-
-  map.vectorLayer.removeFeatures(tempScope[checkedOption].circle);
-  tempScope.splice(checkedOption,1);
-  // console.log("원지우기함")
-  groupMarker.removeMarker(marker.id);
-  map.userMarkers.removeMarker(marker);
+  map.vectorLayer.removeFeatures(tempScope[checked().num].circle);
+  tempScope.splice(checked().num, 1);
+  groupMarker.removeMarker(checked().marker.id);
+  map.userMarkers.removeMarker(checked().marker);
 
   // markerList.option[checkedOption] = null;
-  markerList.remove(checkedOption);
-  // console.log("옵션에서 삭제완료")
-
+  markerList.remove(checked().checkedOption);
 }
 
 let resetAll = function() {
@@ -417,7 +403,7 @@ let resetAll = function() {
   groupMarker.removeGroup('ble');
   groupMarker = null;
   tempMarker = null;
-  tempScope = new Array();
+  tempScope = [];
   num = 0;
 }
 
@@ -446,10 +432,10 @@ let geocoder_reverse = function(x, y) {
       let group = document.getElementById("markerGroup").value;
       let optionText = num + 1 + "번 마커: [" + group + "] " + geoResult;
       addMarker(group, x, y, msg, null);
-      console.log("addMarker 실행완료");
+      // console.log("addMarker 실행완료");
       addOption(optionText);
-      console.log("addOption 완료...");
-      num +=1;
+      // console.log("addOption 완료...");
+      num += 1;
     },
     // beforeSend: function() {},
     error: function(xhr, stat, err) {}
@@ -487,82 +473,82 @@ let geocoder = function(name) {
 ///////////////////////////////////////////////////검색기능
 /////////////////////////////////////////////////////////////
 
-let features = new Array();
-let styleCache = new Array();
+let features = [];
+let styleCache = [];
 
+let search = function() {
+  $.ajax({
+    type: "get",
+    url: "http://map.vworld.kr/search.do",
+    data: $('#searchForm').serialize(),
+    dataType: 'jsonp',
+    async: false,
+    success: function(data) {
 
-let search = function(){
-    $.ajax({
-        type: "get",
-        url: "http://map.vworld.kr/search.do",
-        data : $('#searchForm').serialize(),
-        dataType: 'jsonp',
-        async: false,
-        success: function(data) {
-
-          console.log(data);
-          for(let o in data.LIST){
-            let xy = ol.proj.transform([data.LIST[o].xpos*1, data.LIST[o].ypos*1],'EPSG:4326', "EPSG:900913");
-            let x = xy[0];
-            let y = xy[1];
-            move(x,y)
-          }
-        },
-        error: function(xhr, stat, err) {}
-    });
+      console.log(data);
+      for (let o in data.LIST) {
+        let xy = ol.proj.transform([data.LIST[o].xpos * 1, data.LIST[o].ypos * 1], 'EPSG:4326', "EPSG:900913");
+        let x = xy[0];
+        let y = xy[1];
+        move(x, y)
+      }
+    },
+    error: function(xhr, stat, err) {}
+  });
 
 }
 
-let move = function(x,y){//127.10153, 37.402566
-    map.setCenterAndZoom(x, y, 14);
-    // map.getView().setCenter(ol.proj.transform([ x, y ],'EPSG:4326', "EPSG:900913")); // 지도 이동
-    // map.getView().setZoom(12);
+let move = function(x, y) { //127.10153, 37.402566
+  map.setCenterAndZoom(x, y, 14);
+  // map.getView().setCenter(ol.proj.transform([ x, y ],'EPSG:4326', "EPSG:900913")); // 지도 이동
+  // map.getView().setZoom(12);
 }
 
 ///////////////////////////////////////////////////////////파일생성
 ///////////////////////////////////////////////////////////////////
 
-let makeTextFile = function (text){
-  let data = new Blob([text], {type: 'text/plain'});
+let makeTextFile = function(text) {
+  let data = new Blob([text], {
+    type: 'text/plain'
+  });
 
-    // If we are replacing a previously generated file we need to
-    // manually revoke the object URL to avoid memory leaks.
-    if (textFile !== null) {
-      window.URL.revokeObjectURL(textFile);
-    }
+  // If we are replacing a previously generated file we need to
+  // manually revoke the object URL to avoid memory leaks.
+  if (textFile !== null) {
+    window.URL.revokeObjectURL(textFile);
+  }
   textFile = window.URL.createObjectURL(data);
 
-     // returns a URL you can use as a href
-    return textFile;
-  };
+  // returns a URL you can use as a href
+  return textFile;
+};
 
-  let todayFile = 0;
+let todayFile = 0;
 
-  let saveTextAsFile = function(){
+let saveTextAsFile = function() {
 
-    let textToWrite = map.userMarkers.marker;
-    let textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});
-    let today =new Date().getYear() +""+ new Date().getMonth() +""+ new Date().getDay();
-    let fileNameToSaveAs = marker+today+"_"+todayFile;
-    let downloadLink = document.createElement("a");
-    downloadLink.download = fileNameToSaveAs;
-    downloadLink.innerHTML = "Download File";
-    if (window.webkitURL != null)
-    {
-        // Chrome allows the link to be clicked
-        // without actually adding it to the DOM.
-        downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
-    }
-    else
-    {
-        // Firefox requires the link to be added to the DOM
-        // before it can be clicked.
-        downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
-        downloadLink.onclick = destroyClickedElement;
-        downloadLink.style.display = "none";
-        document.body.appendChild(downloadLink);
-    }
+  let textToWrite = map.userMarkers.marker;
+  let textFileAsBlob = new Blob([textToWrite], {
+    type: 'text/plain'
+  });
+  let today = new Date().getYear() + "" + new Date().getMonth() + "" + new Date().getDay();
+  let fileNameToSaveAs = marker + today + "_" + todayFile;
+  let downloadLink = document.createElement("a");
+  downloadLink.download = fileNameToSaveAs;
+  downloadLink.innerHTML = "Download File";
+  if (window.webkitURL != null) {
+    // Chrome allows the link to be clicked
+    // without actually adding it to the DOM.
+    downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+  } else {
+    // Firefox requires the link to be added to the DOM
+    // before it can be clicked.
+    downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+    downloadLink.onclick = destroyClickedElement;
+    downloadLink.style.display = "none";
+    document.body.appendChild(downloadLink);
+  }
 
-    downloadLink.click();
-    todayFile +=1;
+  downloadLink.click();
+  todayFile += 1;
 }
